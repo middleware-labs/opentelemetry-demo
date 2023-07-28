@@ -1212,7 +1212,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: frontend
-          image: 'ghcr.io/middleware-labs/otel-demo-recommendationservice'
+          image: 'ghcr.io/open-telemetry/demo:1.4.0-frontend'
           imagePullPolicy: IfNotPresent
           ports:
           
