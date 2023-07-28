@@ -1839,7 +1839,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: recommendationservice
-          image: 'ghcr.io/open-telemetry/demo:1.4.0-recommendationservice'
+          image: 'ghcr.io/middleware-labs/otel-demo-recommendationservice'
           imagePullPolicy: IfNotPresent
           ports:
           
