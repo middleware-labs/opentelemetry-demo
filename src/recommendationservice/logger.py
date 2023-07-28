@@ -7,6 +7,15 @@ import logging
 import sys
 from pythonjsonlogger import jsonlogger
 from opentelemetry import trace
+import logging
+
+from mw_tracker import MwTracker
+tracker=MwTracker(
+   access_token=os.getenv("MW_ACCOUNT_KEY")
+)
+tracker.collect_profiling()
+tracker.collect_logs()
+tracker.collect_metrics()
 
 
 class CustomJsonFormatter(jsonlogger.JsonFormatter):

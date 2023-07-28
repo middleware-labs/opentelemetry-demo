@@ -24,7 +24,7 @@ ARG version=1.28.0
 WORKDIR /usr/src/app/
 
 COPY --from=builder /usr/src/app/ ./
-ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v$version/opentelemetry-javaagent.jar /usr/src/app/opentelemetry-javaagent.jar
+ADD https://github.com/middleware-labs/opentelemetry-java-instrumentation/releases/download/v1.3.0/middleware-javaagent-1.3.0.jar /usr/src/app/opentelemetry-javaagent.jar
 RUN chmod 644 /usr/src/app/opentelemetry-javaagent.jar
 ENV JAVA_TOOL_OPTIONS=-javaagent:/usr/src/app/opentelemetry-javaagent.jar
 

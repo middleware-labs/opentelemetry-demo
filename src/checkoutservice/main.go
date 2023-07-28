@@ -14,6 +14,7 @@ import (
 	"sync"
 	"time"
 
+	track "github.com/middleware-labs/golang-apm/tracker"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 
@@ -64,6 +65,12 @@ func init() {
 		TimestampFormat: time.RFC3339Nano,
 	}
 	log.Out = os.Stdout
+
+	go track.Track(
+		track.WithConfigTag("projectName", "otel-demo"),
+		track.WithConfigTag("service", "checkoutservice"),
+		track.WithConfigTag("accessToken", os.Getenv("MW_ACCOUNT_KEY")),
+	)
 }
 
 func initResource() *sdkresource.Resource {

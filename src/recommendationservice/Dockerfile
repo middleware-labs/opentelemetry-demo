@@ -36,8 +36,8 @@ WORKDIR /usr/src/app/
 COPY --from=builder /reqs /usr/local
 COPY --from=grpc-builder /usr/src/app/ .
 COPY ./src/recommendationservice/ ./
-
-RUN opentelemetry-bootstrap -a install
+RUN middleware-bootstrap
+RUN middleware-bootstrap -a install
 
 EXPOSE ${RECOMMENDATION_SERVICE_PORT}
-ENTRYPOINT [ "opentelemetry-instrument", "python", "recommendation_server.py" ]
+ENTRYPOINT [ "middleware-instrument","--exporter_otlp_endpoint $OTEL_EXPORTER_OTLP_ENDPOINT","--resource_attributes=project.name=recommendationservice,mw.app.lang=python,runtime.metrics.python=true", "--service_name recommendationservice","python", "recommendation_server.py" ]

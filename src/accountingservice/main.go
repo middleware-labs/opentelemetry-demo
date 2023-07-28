@@ -9,20 +9,19 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
-	"os/signal"
-	"strings"
-	"sync"
-	"time"
-
+	track "github.com/middleware-labs/golang-apm/tracker"
+	"github.com/open-telemetry/opentelemetry-demo/src/accountingservice/kafka"
 	"github.com/sirupsen/logrus"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
 	sdkresource "go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-
-	"github.com/open-telemetry/opentelemetry-demo/src/accountingservice/kafka"
+	"os"
+	"os/signal"
+	"strings"
+	"sync"
+	"time"
 )
 
 var log *logrus.Logger
@@ -41,6 +40,12 @@ func init() {
 		TimestampFormat: time.RFC3339Nano,
 	}
 	log.Out = os.Stdout
+
+	go track.Track(
+		track.WithConfigTag("projectName", "otel-demo"),
+		track.WithConfigTag("service", "accountingservice"),
+		track.WithConfigTag("accessToken", os.Getenv("MW_ACCOUNT_KEY")),
+	)
 }
 
 func initResource() *sdkresource.Resource {

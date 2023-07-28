@@ -8,6 +8,14 @@ const opentelemetry = require('@opentelemetry/api')
 const charge = require('./charge')
 const logger = require('./logger')
 
+
+const tracker = require('@middleware.io/node-apm');
+tracker.track({ 
+  projectName: "otel-demo",
+  serviceName: "paymentservice",
+  accessToken: process.env.MW_ACCOUNT_KEY,
+});
+
 function chargeServiceHandler(call, callback) {
   const span = opentelemetry.trace.getActiveSpan();
 

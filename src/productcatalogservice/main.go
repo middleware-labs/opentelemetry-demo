@@ -9,6 +9,7 @@ package main
 import (
 	"context"
 	"fmt"
+	track "github.com/middleware-labs/golang-apm/tracker"
 	"io/ioutil"
 	"net"
 	"os"
@@ -52,6 +53,12 @@ var (
 func init() {
 	log = logrus.New()
 	catalog = readCatalogFile()
+
+	go track.Track(
+		track.WithConfigTag("projectName", "otel-demo"),
+		track.WithConfigTag("service", "productcatalogservice"),
+		track.WithConfigTag("accessToken", os.Getenv("MW_ACCOUNT_KEY")),
+	)
 }
 
 func initResource() *sdkresource.Resource {
