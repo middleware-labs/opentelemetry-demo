@@ -1198,12 +1198,10 @@ metadata:
 spec:
   selector:
     matchLabels:
-      
       opentelemetry.io/name: opentelemetry-demo-frontend
   template:
     metadata:
       labels:
-        
         opentelemetry.io/name: opentelemetry-demo-frontend
         app.kubernetes.io/instance: opentelemetry-demo
         app.kubernetes.io/component: frontend
@@ -1212,7 +1210,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: frontend
-          image: 'ghcr.io/middleware-labs/otel-demo-recommendationservice'
+          image: 'ghcr.io/open-telemetry/demo:1.4.0-frontend'
           imagePullPolicy: IfNotPresent
           ports:
           
@@ -1315,7 +1313,6 @@ spec:
           image: 'ghcr.io/middleware-labs/otel-demo-frontendproxy:latest'
           imagePullPolicy: IfNotPresent
           ports:
-          
           - containerPort: 8080
             name: service
           env:
