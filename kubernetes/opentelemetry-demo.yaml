@@ -440,7 +440,7 @@ spec:
       containers:
         - name: accountingservice
           image: 'ghcr.io/middleware-labs/otel-demo-accountingservice:latest'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
           - name: MW_ACCOUNT_KEY
             value: <{.MW_ACCOUNT_KEY}>
@@ -524,7 +524,7 @@ spec:
       containers:
         - name: adservice
           image: 'ghcr.io/middleware-labs/otel-demo-adservice:latest'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
 
           - containerPort: 8080
@@ -608,7 +608,7 @@ spec:
       containers:
         - name: cartservice
           image: 'ghcr.io/open-telemetry/demo:1.4.0-cartservice'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 8080
@@ -696,7 +696,7 @@ spec:
       containers:
         - name: checkoutservice
           image: 'ghcr.io/middleware-labs/otel-demo-checkoutservice:latest'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 8080
@@ -796,7 +796,7 @@ spec:
       containers:
         - name: currencyservice
           image: 'ghcr.io/open-telemetry/demo:1.4.0-currencyservice'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 8080
@@ -872,7 +872,7 @@ spec:
       containers:
         - name: emailservice
           image: 'ghcr.io/open-telemetry/demo:1.4.0-emailservice'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 8080
@@ -950,7 +950,7 @@ spec:
       containers:
         - name: featureflagservice
           image: 'ghcr.io/open-telemetry/demo:1.4.0-featureflagservice'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 50053
@@ -1048,7 +1048,7 @@ spec:
       containers:
         - name: ffspostgres
           image: 'postgres:14'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 5432
@@ -1129,7 +1129,7 @@ spec:
       containers:
         - name: frauddetectionservice
           image: 'ghcr.io/middleware-labs/otel-demo-frauddetectionservice:latest'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
           - name: OTEL_SERVICE_NAME
             valueFrom:
@@ -1211,7 +1211,7 @@ spec:
       containers:
         - name: frontend
           image: 'ghcr.io/open-telemetry/demo:1.4.0-frontend'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 8080
@@ -1311,7 +1311,7 @@ spec:
       containers:
         - name: frontendproxy
           image: 'ghcr.io/middleware-labs/otel-demo-frontendproxy:latest'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           - containerPort: 8080
             name: service
@@ -1414,7 +1414,7 @@ spec:
       containers:
         - name: kafka
           image: 'ghcr.io/open-telemetry/demo:1.4.0-kafka'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 9092
@@ -1498,7 +1498,7 @@ spec:
       containers:
         - name: loadgenerator
           image: 'ghcr.io/open-telemetry/demo:1.4.0-loadgenerator'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 8089
@@ -1586,7 +1586,7 @@ spec:
       containers:
         - name: paymentservice
           image: 'ghcr.io/middleware-labs/otel-demo-paymentservice:latest'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 8080
@@ -1672,7 +1672,7 @@ spec:
       containers:
         - name: productcatalogservice
           image: 'ghcr.io/middleware-labs/otel-demo-productcatalogservice:latest'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 8080
@@ -1754,7 +1754,7 @@ spec:
       containers:
         - name: quoteservice 
           image: 'ghcr.io/open-telemetry/demo:1.4.0-quoteservice'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           - containerPort: 8080
             name: service
@@ -1836,8 +1836,8 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: recommendationservice
-          image: 'ghcr.io/open-telemetry/demo:1.4.0-recommendationservice'
-          imagePullPolicy: IfNotPresent
+          image: 'ghcr.io/middleware-labs/otel-demo-recommendationservice'
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 8080
@@ -1923,7 +1923,7 @@ spec:
       containers:
         - name: redis
           image: 'redis:alpine'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 6379
@@ -1999,7 +1999,7 @@ spec:
       containers:
         - name: shippingservice
           image: 'ghcr.io/open-telemetry/demo:1.4.0-shippingservice'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
           
           - containerPort: 8080
