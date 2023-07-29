@@ -3,16 +3,19 @@
 # Copyright The OpenTelemetry Authors
 # SPDX-License-Identifier: Apache-2.0
 
-# Middleware APM setup 
-from mw_tracker import MwTracker
-tracker=MwTracker(
-   access_token="pctrjpvjpnhpmlbrbexthkasxvabtqjkwsnl"
-)
-
 # Python
 import os
 import random
 from concurrent import futures
+
+# Middleware APM setup 
+from mw_tracker import MwTracker
+tracker=MwTracker(
+   access_token=os.getenv("MW_ACCOUNT_KEY")
+)
+tracker.collect_profiling()
+tracker.collect_logs()
+tracker.collect_metrics()
 
 # Pip
 import grpc
