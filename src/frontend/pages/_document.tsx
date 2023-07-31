@@ -7,6 +7,21 @@ import { ServerStyleSheet } from 'styled-components';
 const { ENV_PLATFORM, WEB_OTEL_SERVICE_NAME, PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT } = process.env;
 
 const envString = `
+var head = document.getElementsByTagName('head')[0],
+    script = document.createElement('script');
+script.src = 'https://cdnjs.middleware.io/browser/libs/0.0.1/middleware-rum.min.js';    
+script.onload=function(){
+if (window.Middleware){
+    Middleware.track({
+        serviceName:"Otel Demo app",
+        projectName:"Otel Demo app",
+        accountKey:"qbtcmsgwgcfnvrzlidfumcrnovegijtobsit",
+        target:"https://spbnu.middleware.io",
+    })
+}
+}
+head.appendChild(script);
+
 window.ENV = {
   NEXT_PUBLIC_PLATFORM: '${ENV_PLATFORM}',
   NEXT_PUBLIC_OTEL_SERVICE_NAME: '${WEB_OTEL_SERVICE_NAME}',
