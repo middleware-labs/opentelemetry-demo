@@ -20,6 +20,14 @@ spec:
           ports:
             - containerPort: 3000
           env:
+            - name: PGDB_HOST
+              value: opentelemetry-demo-ffspostgres
+            - name: PGDB_USER
+              value: ffs
+            - name: PGDB_PASS
+              value: ffs
+            - name: PGDB_DB
+              value: ffs
             - name: MW_ACCOUNT_KEY
               value: <{.MW_ACCOUNT_KEY}>
             - name: MW_AGENT_SERVICE

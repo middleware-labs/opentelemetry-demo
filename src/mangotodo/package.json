@@ -11,6 +11,9 @@
   "author": "Jogesh",
   "license": "ISC",
   "dependencies": {
+    "knex": "^0.20.11",
+    "pg": "^7.18.2",
+    "@middleware.io/node-apm": "^1.2.1",
     "body-parser": "^1.19.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",

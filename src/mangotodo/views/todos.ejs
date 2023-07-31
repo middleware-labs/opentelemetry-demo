@@ -18,7 +18,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 m-auto pt-4">
-                    <form method="POST" action="/todo" autocomplete="off">
+                    <form method="POST" action="<%= base %>" autocomplete="off">
                         <div class="row">
                             <div class="col-12 form-group">
                                 <label for="todo">Enter your task</label>
@@ -41,7 +41,7 @@
                                                 </div>
                                             </div>
                                             <a href="javascript:;" onclick="this.children[0].submit()" class="text-danger">
-                                                <form method="POST" action="/todo/destroy">
+                                                <form method="POST" action="<%= base %>/destroy">
                                                     <input type="hidden" name="_key" value="<%= todo._id %>"/>
                                                 </form>
                                                 <i class="fa fa-trash-o"></i>

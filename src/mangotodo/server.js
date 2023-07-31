@@ -4,7 +4,8 @@ const app = require('express')();
 const moment = require('moment');
 
 // Fontend route
-const FrontRouter = require('./routes/front');
+const FrontMongoRouter = require('./routes/front_mongo');
+const FrontPgDbRouter = require('./routes/front_pgdb');
 
 // Set ejs template engine
 app.set('view engine', 'ejs');
@@ -19,14 +20,17 @@ mongoose
 .then(() => console.log(`Mongodb Connected`))
 .catch(error => console.log(error));
 
+/*
 const tracker = require('@middleware.io/node-apm');
 tracker.track({
     projectName: "otel-demo",
     serviceName: "mangotodo",
     accessToken: process.env.MW_ACCOUNT_KEY,
 });
+*/
 
-app.use(FrontRouter);
+app.use(FrontMongoRouter);
+app.use(FrontPgDbRouter);
 
 
 const PORT = process.env.PORT || 3000;
