@@ -20,70 +20,48 @@ spec:
           ports:
             - containerPort: 3000
           env:
+            - name: MW_ACCOUNT_KEY
+              value: <{.MW_ACCOUNT_KEY}>
+            - name: MW_AGENT_SERVICE
+              value: mw-service.mw-agent-ns.svc.cluster.local
             - name: MONGO_HOST
-              value: mongo:27017
+              value: mongodb:27017
           imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mangotodo-svc
+  name: mangotodo
 spec:
   selector:
     app: mangotodo
   ports:
     - port: 3000
+      name: mangotodo
       targetPort: 3000
   type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo
+  name: mongodb
+  labels:
+    app: mongodb
 spec:
   selector:
     matchLabels:
-      app: mongo
+      app: mongodb
+  replicas: 1
   template:
     metadata:
       labels:
-        app: mongo
+        app: mongodb
     spec:
       containers:
-        - name: mongo
-          image: mongo
+        - name: mongodb
+          image: mongo:latest
           ports:
             - containerPort: 27017
-          volumeMounts:
-            - name: storage
-              mountPath: /data/db
-      volumes:
-        - name: storage
-          persistentVolumeClaim:
-            claimName: mongo-pvc
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: mongo-pv
-spec:
-  capacity:
-    storage: 256Mi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /tmp/db
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mongo-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 256Mi
 ---
 apiVersion: v1
 kind: Service
@@ -91,8 +69,9 @@ metadata:
   name: mongodb
 spec:
   selector:
-    app: mongo
+    app: mongodb
   ports:
     - port: 27017
+      name: mongodb
       targetPort: 27017
   type: ClusterIP

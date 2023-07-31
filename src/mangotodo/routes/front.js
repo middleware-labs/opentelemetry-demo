@@ -4,7 +4,7 @@ const Todo = require('./../models/Todo');
 const router = express.Router();
 
 
-router.get('/', (req, res) => {
+router.get('/todo', (req, res) => {
 
     Todo.find({}, (err, todos) => {
 
@@ -15,13 +15,13 @@ router.get('/', (req, res) => {
 });
 
 // POST - Submit Task
-router.post('/', (req, res) => {
+router.post('/todo', (req, res) => {
     const newTask = new Todo({
         task: req.body.task
     });
 
     newTask.save()
-    .then(task => res.redirect('/'))
+    .then(task => res.redirect('/todo'))
     .catch(err => console.log(err));
 });
 
@@ -32,7 +32,7 @@ router.post('/todo/destroy', (req, res) => {
     Todo.findOneAndRemove({_id: taskKey}, (err) => {
 
         if(err) console.log(err);
-        res.redirect('/');
+        res.redirect('/todo');
     });
 });
 

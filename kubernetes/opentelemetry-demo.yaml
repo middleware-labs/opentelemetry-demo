@@ -191,9 +191,9 @@ metadata:
     app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
-    - port: 80
+    - port: 8080
       name: tcp-service
       targetPort: 8080
   selector:
@@ -213,10 +213,13 @@ metadata:
     app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 8080
       name: tcp-service
+      targetPort: 8080
+    - port: 80
+      name: public-service
       targetPort: 8080
   selector:
     
@@ -262,9 +265,9 @@ metadata:
     app.kubernetes.io/version: "1.4.0"
     app.kubernetes.io/part-of: opentelemetry-demo
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
-    - port: 80
+    - port: 8089
       name: tcp-service
       targetPort: 8089
   selector:
@@ -1131,6 +1134,11 @@ spec:
           image: 'ghcr.io/middleware-labs/otel-demo-frauddetectionservice:latest'
           imagePullPolicy: Always
           env:
+          - name: PYROSCOPE_APPLICATION_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.labels['app.kubernetes.io/component']
           - name: OTEL_SERVICE_NAME
             valueFrom:
               fieldRef:

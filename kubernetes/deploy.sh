@@ -9,3 +9,4 @@ cat ./mongo.yaml | yq | envtmpl -dl "<{" -dr "}>" - > ./mongo.final
 kubectl apply -f mongo.final  -n otel-demo
 
 rm ./opentelemetry-demo.yaml.final
+rm ./mongo.final

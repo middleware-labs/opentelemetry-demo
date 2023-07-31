@@ -19,6 +19,12 @@ mongoose
 .then(() => console.log(`Mongodb Connected`))
 .catch(error => console.log(error));
 
+const tracker = require('@middleware.io/node-apm');
+tracker.track({
+    projectName: "otel-demo",
+    serviceName: "mangotodo",
+    accessToken: process.env.MW_ACCOUNT_KEY,
+});
 
 app.use(FrontRouter);
 

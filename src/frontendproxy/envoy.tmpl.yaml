@@ -34,6 +34,8 @@ static_resources:
                       routes:
                         - match: { prefix: "/feature" }
                           route: { cluster: featureflag, prefix_rewrite: "/" }
+                        - match: { prefix: "/todo" }
+                          route: { cluster: todo}
                         - match: { prefix: "/loadgen" }
                           route: { cluster: loadgen, prefix_rewrite: "/" }
                         - match: { prefix: "/oltp-http/" }
@@ -87,6 +89,18 @@ static_resources:
                     socket_address:
                       address: ${FRONTEND_HOST}
                       port_value: ${FRONTEND_PORT}
+    - name: todo
+      type: STRICT_DNS
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: todo
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: mangotodo
+                      port_value: 3000
     - name: featureflag
       type: STRICT_DNS
       lb_policy: ROUND_ROBIN
