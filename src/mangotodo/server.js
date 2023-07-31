@@ -23,14 +23,12 @@ mongoose
     process.exit(1)
 });
 
-/*
-const tracker = require('@middleware.io/node-apm');
+/*const tracker = require('@middleware.io/node-apm');
 tracker.track({
     projectName: "otel-demo",
     serviceName: "mangotodo",
     accessToken: process.env.MW_ACCOUNT_KEY,
-});
-*/
+});*/
 
 app.use(FrontMongoRouter);
 app.use(FrontPgDbRouter);
