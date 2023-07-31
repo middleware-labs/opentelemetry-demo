@@ -850,7 +850,6 @@ kind: Deployment
 metadata:
   name: opentelemetry-demo-emailservice
   labels:
-    
     opentelemetry.io/name: opentelemetry-demo-emailservice
     app.kubernetes.io/instance: opentelemetry-demo
     app.kubernetes.io/component: emailservice
@@ -860,12 +859,10 @@ metadata:
 spec:
   selector:
     matchLabels:
-      
       opentelemetry.io/name: opentelemetry-demo-emailservice
   template:
     metadata:
       labels:
-        
         opentelemetry.io/name: opentelemetry-demo-emailservice
         app.kubernetes.io/instance: opentelemetry-demo
         app.kubernetes.io/component: emailservice
@@ -922,7 +919,6 @@ spec:
             limits:
               memory: 100Mi
 ---
-# Source: opentelemetry-demo/templates/component.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -938,12 +934,10 @@ metadata:
 spec:
   selector:
     matchLabels:
-      
       opentelemetry.io/name: opentelemetry-demo-featureflagservice
   template:
     metadata:
       labels:
-        
         opentelemetry.io/name: opentelemetry-demo-featureflagservice
         app.kubernetes.io/instance: opentelemetry-demo
         app.kubernetes.io/component: featureflagservice
@@ -955,7 +949,6 @@ spec:
           image: 'ghcr.io/open-telemetry/demo:1.4.0-featureflagservice'
           imagePullPolicy: Always
           ports:
-          
           - containerPort: 50053
             name: grpc
           - containerPort: 8081
@@ -1020,7 +1013,6 @@ spec:
           image: busybox:latest
           name: wait-for-ffspostgres
 ---
-# Source: opentelemetry-demo/templates/component.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:

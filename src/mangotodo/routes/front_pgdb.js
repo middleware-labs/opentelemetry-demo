@@ -3,11 +3,11 @@ const express = require('express');
 const router = express.Router();
 
 
-const Pool = require('pg').Pool
-const pool = new Pool({
+const PgPool = require('pg').Pool
+const pool = new PgPool({
     user: process.env.PGDB_USER,
     host: process.env.PGDB_HOST,
-    database: process.env.PGDB_DB,
+    //database: process.env.PGDB_DB,
     password: process.env.PGDB_PASS,
     port: 5432,
 })
@@ -34,8 +34,11 @@ router.get('/todo/pgdb', (req, res) => {
         if (error) {
             return res.status(400).json(error)
         }
-        res.render("index", {
-            tasks: (Object.keys(results).length > 0 ? results : {}),
+        results.rows.forEach(r=>{
+            r._id=r.id
+        })
+        res.render("todos", {
+            tasks: (Object.keys(results.rows).length > 0 ? results.rows : {}),
             base: "/todo/pgdb"
         });
     })
@@ -57,8 +60,9 @@ router.post('/todo/pgdb', (req, res) => {
 router.post('/todo/pgdb/destroy', (req, res) => {
     const taskKey = req.body._key;
 
-    pool.query('DELETE FROM todo WHERE id = $1', [taskKey], (error, results) => {
+    pool.query('DELETE FROM todo WHERE id = $1', [taskKey+""], (error, results) => {
         if (error) {
+            console.error(error)
             return res.status(400).json({ message: "unable to delete a new task" });
         }
         res.redirect("/todo/pgdb");

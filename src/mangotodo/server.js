@@ -18,7 +18,10 @@ const db = require('./config/keys').mongoProdURI;
 mongoose
 .connect(db, {useNewUrlParser: true})
 .then(() => console.log(`Mongodb Connected`))
-.catch(error => console.log(error));
+.catch(error => {
+    console.log(error)
+    process.exit(1)
+});
 
 /*
 const tracker = require('@middleware.io/node-apm');
