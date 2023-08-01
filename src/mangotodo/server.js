@@ -1,3 +1,10 @@
+const tracker = require('@middleware.io/node-apm');
+tracker.track({ 
+  projectName: "otel-demo",
+  serviceName: "mangotodo",
+  accessToken: process.env.MW_ACCOUNT_KEY,
+});
+
 const mongoose = require('mongoose');
 const bodyParse = require('body-parser');
 const app = require('express')();
@@ -21,13 +28,6 @@ mongoose
 .catch(error => {
     console.log(error)
     process.exit(1)
-});
-
-const tracker = require('@middleware.io/node-apm');
-tracker.track({ 
-  projectName: "otel-demo",
-  serviceName: "mangotodo",
-  accessToken: process.env.MW_ACCOUNT_KEY,
 });
 
 app.use(FrontMongoRouter);

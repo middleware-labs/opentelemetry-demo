@@ -11,13 +11,13 @@
   "author": "Jogesh",
   "license": "ISC",
   "dependencies": {
-    "pg": "^8.11.1",
     "@middleware.io/node-apm": "^1.2.1",
     "body-parser": "^1.19.0",
     "ejs": "^2.6.2",
     "express": "^4.17.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.6.3"
+    "mongoose": "^7.4.1",
+    "pg": "^8.11.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
