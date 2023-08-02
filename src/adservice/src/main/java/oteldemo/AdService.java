@@ -177,7 +177,8 @@ public final class AdService {
                 adRequestTypeKey, adRequestType.name(), adResponseTypeKey, adResponseType.name()));
 
         if (checkAdFailure()) {
-          logger.warn(ADSERVICE_FAIL_FEATURE_FLAG + " fail feature flag enabled");
+          logger.error("Cannot run more ads, ad campaign expired");
+          // logger.warn(ADSERVICE_FAIL_FEATURE_FLAG + " fail feature flag enabled");
           throw new StatusRuntimeException(Status.RESOURCE_EXHAUSTED);
         }
 
