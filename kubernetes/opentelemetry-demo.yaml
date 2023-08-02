@@ -1041,6 +1041,22 @@ spec:
     spec:
       serviceAccountName: opentelemetry-demo
       containers:
+        - name: mw-host-agent-sidecar
+          image: ghcr.io/middleware-labs/mw-host-agent:mongo-k8s-demo
+          imagePullPolicy: Always
+          env:
+            - name: MW_API_KEY
+              value: <{.MW_ACCOUNT_KEY}>
+            - name: MW_TARGET
+              value: https://spbnu.middleware.io:443
+            - name: MW_CONFIG_CHECK_INTERVAL
+              value: "0"
+            - name: MW_POSTGRES_USER
+              value: <{.MW_POSTGRES_USER}>
+            - name: MW_POSTGRES_PASSWORD
+              value: <{.MW_POSTGRES_PASSWORD}>
+            - name: MW_POSTGRES_DB
+              value: <{.MW_POSTGRES_DB}>
         - name: ffspostgres
           image: 'postgres:14'
           imagePullPolicy: Always

@@ -1,41 +1,44 @@
 const express = require('express');
-const Todo = require('./../models/Todo');
-
 const router = express.Router();
+const Todo = require('./../models/Todo'); // Assuming Todo is the Mongoose model for tasks
 
-
-router.get('/todo/mongo', (req, res) => {
-
-    Todo.find({}, (err, todos) => {
-
+router.get('/todo/mongo', async (req, res) => {
+    try {
+        const todos = await Todo.find({});
         res.render("todos", {
-            tasks: (Object.keys(todos).length > 0 ? todos : {}),
+            tasks: (todos.length > 0 ? todos : {}),
             base: "/todo/mongo"
         });
-    });
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500); // Handle the error appropriately in your application
+    }
 });
 
 // POST - Submit Task
-router.post('/todo/mongo', (req, res) => {
-    const newTask = new Todo({
-        task: req.body.task
-    });
-
-    newTask.save()
-    .then(task => res.redirect('/todo/mongo'))
-    .catch(err => console.log(err));
+router.post('/todo/mongo', async (req, res) => {
+    try {
+        const newTask = new Todo({
+            task: req.body.task
+        });
+        await newTask.save();
+        res.redirect('/todo/mongo');
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500); // Handle the error appropriately in your application
+    }
 });
 
 // POST - Destroy todo item
-router.post('/todo/mongo/destroy', (req, res) => {
+router.post('/todo/mongo/destroy', async (req, res) => {
     const taskKey = req.body._key;
-
-    Todo.findOneAndRemove({_id: taskKey}, (err) => {
-
-        if(err) console.log(err);
+    try {
+        await Todo.findOneAndDelete({ _id: taskKey });
         res.redirect('/todo/mongo');
-    });
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500); // Handle the error appropriately in your application
+    }
 });
-
 
 module.exports = router;
