@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: npm-apm-demo-postgres-init
+  namespace: otel-demo
+data:
+  init.sql: |
+    -- Create the database 'todo' if it does not exist
+    SELECT 'CREATE DATABASE todo'
+    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'todo')\gexec
+
+    -- Switch to the 'todo' database
+    \c todo;
+
+    -- Table structure for table 'tutorials'
+    CREATE TABLE tutorials (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) DEFAULT NULL,
+      description TEXT DEFAULT NULL,
+      published BOOLEAN DEFAULT NULL
+    );
+
+    -- Data for the table 'tutorials'
+    INSERT INTO tutorials (id, title, description, published) VALUES
+      (1, 'git-put', 'test description', NULL);
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: node-apm-demo
+  name: node-apm-demo
+  namespace: otel-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: node-apm-demo
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        name: node-apm-demo
+    spec:
+      containers:
+        - name: node-apm-demo
+          image: ghcr.io/middleware-labs/otel-demo-postgresdbquery:latest
+          imagePullPolicy: Always 
+          args:
+            - node
+            - app.js
+          env:
+            - name: MW_AUTOGENERATE_TRACING_DATA
+              value: "true"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: mw-service.mw-agent-ns.svc.cluster.local:9319
+            - name: POSTGRES_HOST
+              value: localhost
+            - name: POSTGRES_DB
+              value: todo
+            - name: POSTGRES_USER
+              value: otel-demo
+            - name: POSTGRES_PASSWORD
+              value: otel-demo
+            - name: OTEL_SERVICE_NAME
+              value: tutorialservice
+          resources: {}
+        - name: postgres
+          env:
+            - name: POSTGRES_DB
+              value: todo
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: trust
+            - name: POSTGRES_USER
+              value: otel-demo
+            - name: POSTGRES_PASSWORD
+              value: otel-demo
+          image: postgres
+          name: postgres
+          resources: {}
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d
+              name: postgres-init
+        - name: mw-host-agent-sidecar
+          image: ghcr.io/middleware-labs/mw-host-agent:postgres-k8s-demo
+          imagePullPolicy: Always
+          env:
+            - name: MW_API_KEY
+              value: pctrjpvjpnhpmlbrbexthkasxvabtqjkwsnl
+            - name: MW_TARGET
+              value: https://spbnu.middleware.io:443
+            - name: MW_CONFIG_CHECK_INTERVAL
+              value: "0"
+          ports:
+          - containerPort: 3002
+            name: node-service
+      volumes:
+        - name: postgres-init
+          configMap: 
+            name: npm-apm-demo-postgres-init
+      restartPolicy: Always
