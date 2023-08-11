@@ -1,4 +1,4 @@
-kubectl config use-context mw-aws-otel-demo
+kubectl config use-context  mw-demo-env
 kubectl create ns otel-demo || true
 eval "$(cat ./.env | grep '\S' | sed 's/^/export /' | sed 's/\r$//')"
 
