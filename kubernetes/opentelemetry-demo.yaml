@@ -1512,7 +1512,7 @@ spec:
       serviceAccountName: opentelemetry-demo
       containers:
         - name: loadgenerator
-          image: 'ghcr.io/open-telemetry/demo:1.4.0-loadgenerator'
+          image: 'ghcr.io/middleware-labs/otel-demo-loadgenerator:latest'
           imagePullPolicy: Always
           ports:
           

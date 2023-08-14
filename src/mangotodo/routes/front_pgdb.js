@@ -70,5 +70,18 @@ router.post('/todo/pgdb/destroy', (req, res) => {
 
 });
 
+// POST - Destroy all todo items
+router.post('/todo/pgdb/destroyall', (req, res) => {
+    const taskKey = req.body._key;
+
+    pool.query('DELETE FROM todo', (error, results) => {
+        if (error) {
+            console.error(error)
+            return res.status(400).json({ message: "unable to delete all tasks" });
+        }
+        res.redirect("/todo/pgdb");
+    })
+
+});
 
 module.exports = router;

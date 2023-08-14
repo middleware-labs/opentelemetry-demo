@@ -6,6 +6,7 @@
 
 import json
 import random
+import urllib.parse
 import uuid
 from locust import HttpUser, task, between
 
@@ -60,7 +61,6 @@ products = [
 
 people_file = open('people.json')
 people = json.load(people_file)
-
 
 class WebsiteUser(HttpUser):
     wait_time = between(1, 3)
@@ -129,3 +129,25 @@ class WebsiteUser(HttpUser):
         ctx = baggage.set_baggage("synthetic_request", "true")
         context.attach(ctx)
         self.index()
+
+class DatabaseUser(HttpUser):
+    db_host = "http://mangotodo:3000" #applies to both mongo and pgdb
+    wait_time = between(1,3)
+    @task(1)
+    def add_mongo_tasks(self):
+        for i in range(100):
+            insert_url = urllib.parse.urljoin(self.db_host, "todo/mongo")
+            self.client.post(insert_url, data={"task": "task" + str(i)})
+
+        # delete all tasks
+        delete_url = urllib.parse.urljoin(self.db_host, "todo/mongo/destroyall")
+        resp = self.client.post(delete_url)
+
+    @task(1)
+    def add_pgdb_tasks(self):
+        insert_url = urllib.parse.urljoin(self.db_host, "todo/pgdb")
+        for i in range(100):
+            self.client.post(insert_url, data={"task": "task" + str(i)})
+        # delete all tasks
+        delete_url = urllib.parse.urljoin(self.db_host, "todo/pgdb/destroyall")
+        self.client.post(delete_url)            

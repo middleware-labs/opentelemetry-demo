@@ -41,4 +41,17 @@ router.post('/todo/mongo/destroy', async (req, res) => {
     }
 });
 
+
+// POST - Destroy todo item
+router.post('/todo/mongo/destroyall', async (req, res) => {
+    const taskKey = req.body._key;
+    try {
+        await Todo.deleteMany({});
+        res.redirect('/todo/mongo');
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(500); // Handle the error appropriately in your application
+    }
+});
+
 module.exports = router;
