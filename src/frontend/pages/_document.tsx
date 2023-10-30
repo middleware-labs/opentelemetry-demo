@@ -17,6 +17,7 @@ if (window.Middleware){
         projectName:"Otel Demo app",
         accountKey:"qbtcmsgwgcfnvrzlidfumcrnovegijtobsit",
         target:"https://spbnu.middleware.io",
+        tracePropagationTargets: [/demo.mw.dev/i],
     })
 }
 }
