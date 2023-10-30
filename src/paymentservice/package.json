@@ -14,7 +14,7 @@
   "dependencies": {
     "@grpc/grpc-js": "1.8.14",
     "@grpc/proto-loader": "^0.7.6",
-    "@middleware.io/node-apm": "^1.2.1",
+    "@middleware.io/node-apm": "^1.2.4",
     "@opentelemetry/api": "^1.4.1",
     "@opentelemetry/auto-instrumentations-node": "0.38.0",
     "@opentelemetry/core": "1.15.0",
