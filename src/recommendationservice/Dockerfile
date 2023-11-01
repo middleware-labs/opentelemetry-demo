@@ -37,7 +37,10 @@ COPY --from=builder /reqs /usr/local
 COPY --from=grpc-builder /usr/src/app/ .
 COPY ./src/recommendationservice/ ./
 
-RUN middleware-bootstrap -a install
+#RUN middleware-bootstrap -a install
+
+# Setup ENV variables
+ENV MIDDLEWARE_CONFIG_FILE=./middleware.ini
 
 EXPOSE ${RECOMMENDATION_SERVICE_PORT}
-ENTRYPOINT [ "middleware-instrument","python", "recommendation_server.py" ]
+ENTRYPOINT [ "middleware-apm" ,"run" ,"python", "recommendation_server.py" ]

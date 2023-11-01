@@ -12,7 +12,6 @@ import logging
 
 from middleware import MwTracker
 tracker=MwTracker()
-print("OTEL_RESOURCE_ATTRIBUTES:: ", os.environ.get("OTEL_RESOURCE_ATTRIBUTES"))
 # Pip
 import grpc
 # from opentelemetry import trace, metrics
