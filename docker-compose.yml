@@ -497,6 +497,7 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES
       - OTEL_SERVICE_NAME=recommendationservice
       - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+      - MIDDLEWARE_CONFIG_FILE=./middleware.ini
     depends_on:
       featureflagservice:
         condition: service_started
