@@ -1,15 +1,13 @@
 // Copyright The OpenTelemetry Authors
 // SPDX-License-Identifier: Apache-2.0
 
-import '../styles/globals.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import App, { AppContext, AppProps } from 'next/app';
-import { getCookie } from 'cookies-next';
-import CurrencyProvider from '../providers/Currency.provider';
-import CartProvider from '../providers/Cart.provider';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider } from 'styled-components';
+import CartProvider from '../providers/Cart.provider';
+import CurrencyProvider from '../providers/Currency.provider';
 import Theme from '../styles/Theme';
-import FrontendTracer from '../utils/telemetry/FrontendTracer';
+import '../styles/globals.css';
 
 declare global {
   interface Window {
@@ -19,11 +17,6 @@ declare global {
       NEXT_PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT?: string;
     };
   }
-}
-
-if (typeof window !== 'undefined') {
-  const collector = getCookie('otelCollectorUrl')?.toString() || '';
-  FrontendTracer(collector);
 }
 
 const queryClient = new QueryClient();
