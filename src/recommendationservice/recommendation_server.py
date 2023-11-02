@@ -7,11 +7,6 @@
 import os
 import random
 from concurrent import futures
-
-import logging
-
-from middleware import MwTracker
-tracker=MwTracker()
 # Pip
 import grpc
 # from opentelemetry import trace, metrics
@@ -29,6 +24,10 @@ import demo_pb2_grpc
 from grpc_health.v1 import health_pb2
 from grpc_health.v1 import health_pb2_grpc
 
+import logging
+
+from middleware import MwTracker
+tracker=MwTracker()
 from metrics import (
     init_metrics
 )
