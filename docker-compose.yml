@@ -111,7 +111,7 @@ services:
       context: ./
       dockerfile: ./src/checkoutservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-checkoutservice
+        - ghcr.io/middleware-labs/otel-demo-checkoutservice
     deploy:
       resources:
         limits:
@@ -270,7 +270,7 @@ services:
       context: ./
       dockerfile: ./src/frontend/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-frontend
+        - ghcr.io/middleware-labs/otel-demo-frontend
     deploy:
       resources:
         limits:
@@ -291,7 +291,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_RESOURCE_ATTRIBUTES=${OTEL_RESOURCE_ATTRIBUTES}
       - ENV_PLATFORM
-      - OTEL_SERVICE_NAME=frontend
+      - OTEL_SERVICE_NAME=mw-frontend
       - PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       - WEB_OTEL_SERVICE_NAME=frontend-web
@@ -398,7 +398,7 @@ services:
       context: ./
       dockerfile: ./src/paymentservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-paymentservice
+        - ghcr.io/middleware-labs/otel-demo-paymentservice
     deploy:
       resources:
         limits:
@@ -656,6 +656,9 @@ services:
       dockerfile: ./src/otelcollector/Dockerfile
       cache_from:
         - ${IMAGE_NAME}:${IMAGE_VERSION}-otelcol
+    environment:
+      - MW_API_KEY
+      - MW_TARGET
     deploy:
       resources:
         limits:
@@ -667,7 +670,9 @@ services:
       - ./src/otelcollector/otelcol-observability.yml:/etc/otelcol-observability.yml
       - ./src/otelcollector/otelcol-config-extras.yml:/etc/otelcol-config-extras.yml
     ports:
-      - "4317"          # OTLP over gRPC receiver
+      - "4317"          # OTLP over gRPC receiver         
+      - "9319"          # OTLP over gRPC receiver
+      # - "9320:9320"          # OTLP over gRPC receiver
       - "4318:4318"     # OTLP over HTTP receiver
       - "9464"          # Prometheus exporter
       - "8888"          # metrics endpoint

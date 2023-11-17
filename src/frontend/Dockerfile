@@ -3,12 +3,15 @@
 
 
 FROM node:18-alpine AS deps
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat python3 build-base
+RUN apk add --no-cache protobuf-dev protoc
 
 WORKDIR /app
 
+RUN npm install -g npm@10.2.3
+
 COPY ./src/frontend/package*.json ./
-RUN npm ci
+RUN npm i
 
 FROM node:18-alpine AS builder
 RUN apk add --no-cache libc6-compat protobuf-dev protoc
