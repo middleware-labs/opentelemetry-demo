@@ -210,19 +210,19 @@ func (cs *checkoutService) Watch(req *healthpb.HealthCheckRequest, ws healthpb.H
 }
 
 func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderRequest) (*pb.PlaceOrderResponse, error) {
-	span := trace.SpanFromContext(ctx)
-	span.SetAttributes(
-		attribute.String("app.user.id", req.UserId),
-		attribute.String("app.user.currency", req.UserCurrency),
-	)
+	// span := trace.SpanFromContext(ctx)
+	// span.SetAttributes(
+	// 	attribute.String("app.user.id", req.UserId),
+	// 	attribute.String("app.user.currency", req.UserCurrency),
+	// )
 	log.Infof("[PlaceOrder] user_id=%q user_currency=%q", req.UserId, req.UserCurrency)
 
-	var err error
-	defer func() {
-		if err != nil {
-			span.AddEvent("error", trace.WithAttributes(attribute.String("exception.message", err.Error())))
-		}
-	}()
+	// var err error
+	// defer func() {
+	// 	if err != nil {
+	// 		span.AddEvent("error", trace.WithAttributes(attribute.String("exception.message", err.Error())))
+	// 	}
+	// }()
 
 	orderID, err := uuid.NewUUID()
 	if err != nil {
@@ -233,7 +233,7 @@ func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderReq
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
-	span.AddEvent("prepared")
+	// span.AddEvent("prepared")
 
 	total := &pb.Money{CurrencyCode: req.UserCurrency,
 		Units: 0,
@@ -249,15 +249,15 @@ func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderReq
 		return nil, status.Errorf(codes.Internal, "failed to charge card: %+v", err)
 	}
 	log.Infof("payment went through (transaction_id: %s)", txID)
-	span.AddEvent("charged",
-		trace.WithAttributes(attribute.String("app.payment.transaction.id", txID)))
+	// span.AddEvent("charged",
+	// 	trace.WithAttributes(attribute.String("app.payment.transaction.id", txID)))
 
 	shippingTrackingID, err := cs.shipOrder(ctx, req.Address, prep.cartItems)
 	if err != nil {
 		return nil, status.Errorf(codes.Unavailable, "shipping error: %+v", err)
 	}
-	shippingTrackingAttribute := attribute.String("app.shipping.tracking.id", shippingTrackingID)
-	span.AddEvent("shipped", trace.WithAttributes(shippingTrackingAttribute))
+	// shippingTrackingAttribute := attribute.String("app.shipping.tracking.id", shippingTrackingID)
+	// span.AddEvent("shipped", trace.WithAttributes(shippingTrackingAttribute))
 
 	_ = cs.emptyUserCart(ctx, req.UserId)
 
@@ -269,16 +269,16 @@ func (cs *checkoutService) PlaceOrder(ctx context.Context, req *pb.PlaceOrderReq
 		Items:              prep.orderItems,
 	}
 
-	shippingCostFloat, _ := strconv.ParseFloat(fmt.Sprintf("%d.%02d", prep.shippingCostLocalized.GetUnits(), prep.shippingCostLocalized.GetNanos()/1000000000), 64)
-	totalPriceFloat, _ := strconv.ParseFloat(fmt.Sprintf("%d.%02d", total.GetUnits(), total.GetNanos()/1000000000), 64)
+	// shippingCostFloat, _ := strconv.ParseFloat(fmt.Sprintf("%d.%02d", prep.shippingCostLocalized.GetUnits(), prep.shippingCostLocalized.GetNanos()/1000000000), 64)
+	// totalPriceFloat, _ := strconv.ParseFloat(fmt.Sprintf("%d.%02d", total.GetUnits(), total.GetNanos()/1000000000), 64)
 
-	span.SetAttributes(
-		attribute.String("app.order.id", orderID.String()),
-		attribute.Float64("app.shipping.amount", shippingCostFloat),
-		attribute.Float64("app.order.amount", totalPriceFloat),
-		attribute.Int("app.order.items.count", len(prep.orderItems)),
-		shippingTrackingAttribute,
-	)
+	// span.SetAttributes(
+	// 	attribute.String("app.order.id", orderID.String()),
+	// 	attribute.Float64("app.shipping.amount", shippingCostFloat),
+	// 	attribute.Float64("app.order.amount", totalPriceFloat),
+	// 	attribute.Int("app.order.items.count", len(prep.orderItems)),
+	// 	shippingTrackingAttribute,
+	// )
 
 	if err := cs.sendOrderConfirmation(ctx, req.Email, orderResult); err != nil {
 		log.Warnf("failed to send order confirmation to %q: %+v", req.Email, err)

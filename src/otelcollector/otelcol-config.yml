@@ -3,6 +3,16 @@
 
 
 receivers:
+  otlp/mw-apms:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:9319
+      http:
+        endpoint: 0.0.0.0:9320
+        cors:
+          allowed_origins:
+            - "http://*"
+            - "https://*"
   otlp:
     protocols:
       grpc:
@@ -13,7 +23,20 @@ receivers:
             - "https://*"
 
 exporters:
+  otlp/jaeger:
+    endpoint: "jaeger:4317"
+    tls:
+      insecure: true
   logging:
+    loglevel: debug
+  otlp/middleware:
+    endpoint: ${MW_TARGET}
+    headers:
+      authorization: ${MW_API_KEY}
+    sending_queue:
+      enabled: true
+      num_consumers: 100
+      queue_size: 10000
 
 processors:
   batch:
@@ -24,20 +47,25 @@ processors:
         metric_names:
           - queueSize
 
-connectors:
-  spanmetrics:
+# connectors:
+#   spanmetrics:
 
 service:
   pipelines:
     traces:
-      receivers: [otlp]
+      receivers: [otlp, otlp/mw-apms]
       processors: [batch]
-      exporters: [logging, spanmetrics]
+      exporters: [logging, otlp/middleware, otlp/jaeger]
     metrics:
-      receivers: [otlp, spanmetrics]
+      receivers: [otlp, otlp/mw-apms, 
+      # spanmetrics
+      ]
       processors: [filter, batch]
-      exporters: [logging]
+      exporters: [logging, otlp/middleware]
     logs:
-      receivers: [otlp]
+      receivers: [otlp, otlp/mw-apms]
       processors: [batch]
-      exporters: [logging]
+      exporters: [logging, otlp/middleware]
+  telemetry:
+    logs:
+      level: debug

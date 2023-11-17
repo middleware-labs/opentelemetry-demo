@@ -57,6 +57,9 @@ const nextConfig = {
     NEXT_PUBLIC_OTEL_SERVICE_NAME: OTEL_SERVICE_NAME,
     NEXT_PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
   },
+  experimental: {
+    instrumentationHook: true
+  }
 };
 
 module.exports = nextConfig;

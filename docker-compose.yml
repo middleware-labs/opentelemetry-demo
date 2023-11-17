@@ -19,7 +19,7 @@ services:
   # ******************
   # Accounting service
   accountingservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-accountingservice
+    image: ghcr.io/middleware-labs/otel-demo-accountingservice
     container_name: accounting-service
     build:
       context: ./
@@ -46,7 +46,7 @@ services:
 
   # AdService
   adservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-adservice
+    image: ghcr.io/middleware-labs/otel-demo-adservice
     container_name: ad-service
     build:
       context: ./
@@ -105,13 +105,13 @@ services:
 
   # Checkout service
   checkoutservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-checkoutservice
+    image: ghcr.io/middleware-labs/otel-demo-checkoutservice
     container_name: checkout-service
     build:
       context: ./
       dockerfile: ./src/checkoutservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-checkoutservice
+        - ghcr.io/middleware-labs/otel-demo-checkoutservice
     deploy:
       resources:
         limits:
@@ -237,7 +237,7 @@ services:
 
   # Fraud Detection service
   frauddetectionservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-frauddetectionservice
+    image: ghcr.io/middleware-labs/otel-demo-frauddetectionservice
     container_name: frauddetection-service
     build:
       context: ./
@@ -264,13 +264,13 @@ services:
 
   # Frontend
   frontend:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-frontend
+    image: ghcr.io/middleware-labs/otel-demo-frontend
     container_name: frontend
     build:
       context: ./
       dockerfile: ./src/frontend/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-frontend
+        - ghcr.io/middleware-labs/otel-demo-frontend
     deploy:
       resources:
         limits:
@@ -291,7 +291,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_RESOURCE_ATTRIBUTES=${OTEL_RESOURCE_ATTRIBUTES}
       - ENV_PLATFORM
-      - OTEL_SERVICE_NAME=frontend
+      - OTEL_SERVICE_NAME=mw-frontend
       - PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       - WEB_OTEL_SERVICE_NAME=frontend-web
@@ -318,7 +318,8 @@ services:
 
   # Frontend Proxy (Envoy)
   frontendproxy:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-frontendproxy
+    # image: ${IMAGE_NAME}:${IMAGE_VERSION}-frontendproxy
+    image: ghcr.io/middleware-labs/otel-demo-frontendproxy
     container_name: frontend-proxy
     build:
       context: ./
@@ -391,13 +392,13 @@ services:
 
   # Payment service
   paymentservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-paymentservice
+    image: ghcr.io/middleware-labs/otel-demo-paymentservice
     container_name: payment-service
     build:
       context: ./
       dockerfile: ./src/paymentservice/Dockerfile
       cache_from:
-        - ${IMAGE_NAME}:${IMAGE_VERSION}-paymentservice
+        - ghcr.io/middleware-labs/otel-demo-paymentservice
     deploy:
       resources:
         limits:
@@ -418,7 +419,7 @@ services:
 
   # Product Catalog service
   productcatalogservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-productcatalogservice
+    image: ghcr.io/middleware-labs/otel-demo-productcatalogservice
     container_name: product-catalog-service
     build:
       context: ./
@@ -446,7 +447,7 @@ services:
 
   # Quote service
   quoteservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-quoteservice
+    image: ghcr.io/middleware-labs/otel-demo-quoteservice
     container_name: quote-service
     build:
       context: ./
@@ -473,7 +474,7 @@ services:
 
   # Recommendation service
   recommendationservice:
-    image: ${IMAGE_NAME}:${IMAGE_VERSION}-recommendationservice
+    image: ghcr.io/middleware-labs/otel-demo-recommendationservice
     container_name: recommendation-service
     build:
       context: ./
@@ -622,8 +623,9 @@ services:
           memory: 300M
     restart: unless-stopped
     ports:
-      - "${JAEGER_SERVICE_PORT}"                    # Jaeger UI
+      # - "${JAEGER_SERVICE_PORT}"                    # Jaeger UI
       - "4317"                           # OTLP gRPC default port
+      - "16686:16686"
     environment:
       - COLLECTOR_OTLP_ENABLED=true
       - METRICS_STORAGE_TYPE=prometheus
@@ -641,7 +643,8 @@ services:
       - ./src/grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./src/grafana/provisioning/:/etc/grafana/provisioning/
     ports:
-      - "${GRAFANA_SERVICE_PORT}"
+      # - "${GRAFANA_SERVICE_PORT}"
+      - "3000:3000"
     logging: *logging
 
   # OpenTelemetry Collector
@@ -653,6 +656,9 @@ services:
       dockerfile: ./src/otelcollector/Dockerfile
       cache_from:
         - ${IMAGE_NAME}:${IMAGE_VERSION}-otelcol
+    environment:
+      - MW_API_KEY
+      - MW_TARGET
     deploy:
       resources:
         limits:
@@ -664,7 +670,9 @@ services:
       - ./src/otelcollector/otelcol-observability.yml:/etc/otelcol-observability.yml
       - ./src/otelcollector/otelcol-config-extras.yml:/etc/otelcol-config-extras.yml
     ports:
-      - "4317"          # OTLP over gRPC receiver
+      - "4317"          # OTLP over gRPC receiver         
+      - "9319"          # OTLP over gRPC receiver
+      # - "9320:9320"          # OTLP over gRPC receiver
       - "4318:4318"     # OTLP over HTTP receiver
       - "9464"          # Prometheus exporter
       - "8888"          # metrics endpoint
